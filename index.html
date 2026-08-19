@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#080b0a">
+  <title>Планировщик приёмов и увольнений</title>
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+  <link rel="stylesheet" href="style.css">
+  <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.15/index.global.min.js" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.15/locales-all.global.min.js" defer></script>
+  <script src="script.js" defer></script>
+</head>
+<body>
+  <header class="app-header">
+    <div class="shell app-header__inner">
+      <div>
+        <p class="eyebrow">Кадровое планирование</p>
+        <h1>Приёмы и увольнения</h1>
+      </div>
+      <div class="header-actions" aria-label="Создание кадрового события">
+        <button class="button button--primary" id="createHireButton" type="button">
+          <span aria-hidden="true">＋</span> Запланировать приём
+        </button>
+        <button class="button button--secondary" id="createDismissalButton" type="button">
+          <span aria-hidden="true">＋</span> Запланировать увольнение
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main class="app-main shell">
+    <section class="period-panel panel" aria-labelledby="periodTitle">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">Рабочий период</p>
+          <h2 id="periodTitle">Выберите даты</h2>
+        </div>
+        <button class="button button--ghost" id="currentWeekButton" type="button">Текущая неделя</button>
+      </div>
+      <div class="period-fields">
+        <label class="field">
+          <span>Дата с</span>
+          <input id="periodStart" name="periodStart" type="date">
+        </label>
+        <label class="field">
+          <span>Дата по</span>
+          <input id="periodEnd" name="periodEnd" type="date">
+        </label>
+      </div>
+      <p class="field-error" id="periodError" role="alert" hidden></p>
+    </section>
+
+    <section class="summary-section" aria-labelledby="summaryTitle">
+      <div class="section-heading section-heading--compact">
+        <div>
+          <p class="eyebrow">Сводка</p>
+          <h2 id="summaryTitle">События за период</h2>
+        </div>
+        <button class="text-button" id="showAllButton" type="button" aria-pressed="true">Показать все</button>
+      </div>
+      <div class="summary-panel">
+        <button class="summary-card" id="hireSummary" type="button" data-filter="hire" aria-pressed="false">
+          <span class="summary-card__label">Приёмы</span>
+          <strong class="summary-card__value" id="hireCount">0</strong>
+          <span class="summary-card__hint">за выбранный период</span>
+        </button>
+        <button class="summary-card summary-card--dismissal" id="dismissalSummary" type="button" data-filter="dismissal" aria-pressed="false">
+          <span class="summary-card__label">Увольнения</span>
+          <strong class="summary-card__value" id="dismissalCount">0</strong>
+          <span class="summary-card__hint">за выбранный период</span>
+        </button>
+      </div>
+    </section>
+
+    <section class="calendar-section panel" aria-labelledby="calendarTitle">
+      <div class="section-heading section-heading--compact">
+        <div>
+          <p class="eyebrow">Календарь</p>
+          <h2 id="calendarTitle">События по месяцам</h2>
+        </div>
+        <div class="legend" aria-label="Обозначения календаря">
+          <span><i class="legend__dot legend__dot--hire"></i>Приём</span>
+          <span><i class="legend__dot legend__dot--dismissal"></i>Увольнение</span>
+        </div>
+      </div>
+      <div id="calendar" aria-label="Календарь кадровых событий"></div>
+      <div class="calendar-fallback" id="calendarFallback" role="status" hidden>
+        <strong>Календарь временно недоступен</strong>
+        <span>Проверьте подключение к интернету. Таблица и сохранённые данные продолжают работать.</span>
+      </div>
+    </section>
+
+    <section class="table-section panel" aria-labelledby="tableTitle">
+      <div class="section-heading section-heading--compact">
+        <div>
+          <p class="eyebrow">Список</p>
+          <h2 id="tableTitle">Кадровые события</h2>
+        </div>
+        <p class="period-caption" id="periodCaption"></p>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th scope="col">Дата события</th>
+              <th scope="col">Кадровое событие</th>
+              <th scope="col">ФИО</th>
+              <th scope="col">Должность</th>
+              <th scope="col">Подразделение</th>
+              <th scope="col">Ставка</th>
+              <th scope="col">Статус</th>
+              <th scope="col">Комментарий</th>
+              <th scope="col">Действия</th>
+            </tr>
+          </thead>
+          <tbody id="recordsTableBody"></tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+
+  <div id="modalRoot"></div>
+  <div class="toast-container" id="toastContainer" aria-live="polite" aria-atomic="true"></div>
+</body>
+</html>
